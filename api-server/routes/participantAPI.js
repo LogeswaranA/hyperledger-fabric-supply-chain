@@ -13,11 +13,13 @@ var querytranns = require('../app/query.js');
 var ObjectID = require('mongodb').ObjectID;
 var register = require('../app/registerUser.js');
 const passport = require('passport');
-
+var moment = require('moment');
 var warehouseschema = [{ "name": "Id", "required": true, "in": "body", "type": "string", "description": "Id", "isEncrypt": false }, { "name": "Participant_id", "required": true, "in": "body", "type": "string", "description": "Participant_id", "isEncrypt": false }, { "name": "CreatedOn", "required": true, "in": "body", "type": "string", "description": "CreatedOn", "isEncrypt": false }, { "name": "CreatedBy", "required": true, "in": "body", "type": "string", "description": "CreatedBy", "isEncrypt": false }, { "name": "IsDelete", "required": true, "in": "body", "type": "boolean", "description": "IsDelete", "isEncrypt": false }, { "name": "Warehousename", "required": true, "in": "body", "type": "string", "description": "Warehousename", "isEncrypt": false }, { "name": "Warehouse_addr", "required": true, "in": "body", "type": "string", "description": "Warehouse_addr", "isEncrypt": false }, { "name": "City", "required": true, "in": "body", "type": "string", "description": "City", "isEncrypt": false }, { "name": "Pincode", "required": true, "in": "body", "type": "string", "description": "Pincode", "isEncrypt": false }]
 
 
 router.post('/participantapi/warehouse/create', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'warehouse', 'create', req, warehouseschema);
     if (message && message.status == true) {
         res.send(message);
@@ -32,6 +34,8 @@ router.get('/participantapi/warehouse/get/:id', passport.authenticate('jwt', { s
     else { res.send(message); }
 });
 router.put('/participantapi/warehouse/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'warehouse', 'update', req, warehouseschema);
     if (message && message.status == true) {
         res.send(message);
@@ -69,6 +73,8 @@ var manufacturerschema = [{ "name": "Id", "required": true, "in": "body", "type"
 
 
 router.post('/participantapi/manufacturer/create', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'manufacturer', 'create', req, manufacturerschema);
     if (message && message.status == true) {
         res.send(message);
@@ -83,6 +89,8 @@ router.get('/participantapi/manufacturer/get/:id', passport.authenticate('jwt', 
     else { res.send(message); }
 });
 router.put('/participantapi/manufacturer/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'manufacturer', 'update', req, manufacturerschema);
     if (message && message.status == true) {
         res.send(message);
@@ -120,6 +128,8 @@ var distributorschema = [{ "name": "Id", "required": true, "in": "body", "type":
 
 
 router.post('/participantapi/distributor/create', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'distributor', 'create', req, distributorschema);
     if (message && message.status == true) {
         res.send(message);
@@ -134,6 +144,8 @@ router.get('/participantapi/distributor/get/:id', passport.authenticate('jwt', {
     else { res.send(message); }
 });
 router.put('/participantapi/distributor/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'distributor', 'update', req, distributorschema);
     if (message && message.status == true) {
         res.send(message);
@@ -171,6 +183,8 @@ var logisticsschema = [{ "name": "Id", "required": true, "in": "body", "type": "
 
 
 router.post('/participantapi/logistics/create', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'logistics', 'create', req, logisticsschema);
     if (message && message.status == true) {
         res.send(message);
@@ -185,6 +199,8 @@ router.get('/participantapi/logistics/get/:id', passport.authenticate('jwt', { s
     else { res.send(message); }
 });
 router.put('/participantapi/logistics/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'logistics', 'update', req, logisticsschema);
     if (message && message.status == true) {
         res.send(message);

@@ -12,11 +12,13 @@ var invoke = require('../app/invoke.js');
 var querytranns = require('../app/query.js');
 var ObjectID = require('mongodb').ObjectID;
 const passport = require('passport');
-
+var moment = require('moment');
 var motherboardschema = [{ "name": "Id", "required": true, "in": "body", "type": "string", "description": "Id", "isEncrypt": false }, { "name": "CreatedOn", "required": true, "in": "body", "type": "string", "description": "CreatedOn", "isEncrypt": false }, { "name": "CreatedBy", "required": true, "in": "body", "type": "string", "description": "CreatedBy", "isEncrypt": false }, { "name": "IsDelete", "required": true, "in": "body", "type": "boolean", "description": "IsDelete", "isEncrypt": false }, { "name": "Manufacturer_id", "required": true, "in": "body", "type": "string", "description": "Manufacturer_id" }, { "name": "Configuration", "required": true, "in": "body", "type": "string", "description": "Configuration", "isEncrypt": false }, { "name": "Compatibility", "required": true, "in": "body", "type": "string", "description": "Compatibility", "isEncrypt": false }, { "name": "Version", "required": true, "in": "body", "type": "string", "description": "Version", "isEncrypt": false }, { "name": "Processor", "required": true, "in": "body", "type": "string", "description": "Processor", "isEncrypt": false }, { "name": "ManufacturedOn", "required": true, "in": "body", "type": "string", "description": "ManufacturedOn", "isEncrypt": false }]
 
 
 router.post('/assetapi/motherboard/create', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'motherboard', 'create', req, motherboardschema);
     if (message && message.status == true) {
         res.send(message);
@@ -31,6 +33,8 @@ router.get('/assetapi/motherboard/get/:id', passport.authenticate('jwt', { sessi
     else { res.send(message); }
 });
 router.put('/assetapi/motherboard/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'motherboard', 'update', req, motherboardschema);
     if (message && message.status == true) {
         res.send(message);

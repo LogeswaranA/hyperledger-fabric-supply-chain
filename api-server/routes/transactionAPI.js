@@ -12,11 +12,13 @@ var invoke = require('../app/invoke.js');
 var querytranns = require('../app/query.js');
 var ObjectID = require('mongodb').ObjectID;
 const passport = require('passport');
-
+var moment = require('moment');
 var purchaseorderschema = [{ "name": "Id", "required": true, "in": "body", "type": "string", "description": "Id", "isEncrypt": false }, { "name": "CreatedOn", "required": true, "in": "body", "type": "string", "description": "CreatedOn", "isEncrypt": false }, { "name": "CreatedBy", "required": true, "in": "body", "type": "string", "description": "CreatedBy", "isEncrypt": false }, { "name": "IsDelete", "required": true, "in": "body", "type": "boolean", "description": "IsDelete", "isEncrypt": false }, { "name": "Warehouse_id", "required": true, "in": "body", "type": "string", "description": "Warehouse_id" }, { "name": "Motherboard_id", "required": true, "in": "body", "type": "string", "description": "Motherboard_id" }, { "name": "PONumber", "required": true, "in": "body", "type": "string", "description": "PONumber", "isEncrypt": false }, { "name": "POPlacedBy", "required": true, "in": "body", "type": "string", "description": "POPlacedBy", "isEncrypt": false }, { "name": "TotalUnits", "required": true, "in": "body", "type": "string", "description": "TotalUnits", "isEncrypt": false }, { "name": "PricePerUnit", "required": true, "in": "body", "type": "string", "description": "PricePerUnit", "isEncrypt": false }]
 
 
 router.post('/transactionapi/purchaseorder/create', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'purchaseorder', 'create', req, purchaseorderschema);
     if (message && message.status == true) {
         res.send(message);
@@ -36,6 +38,8 @@ router.delete('/transactionapi/purchaseorder/delete', passport.authenticate('jwt
     else { res.send(message); }
 });
 router.put('/transactionapi/purchaseorder/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'purchaseorder', 'update', req, purchaseorderschema);
     if (message && message.status == true) {
         res.send(message);
@@ -59,6 +63,8 @@ var proformainvoiceschema = [{ "name": "Id", "required": true, "in": "body", "ty
 
 
 router.post('/transactionapi/proformainvoice/create', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'proformainvoice', 'create', req, proformainvoiceschema);
     if (message && message.status == true) {
         res.send(message);
@@ -78,6 +84,8 @@ router.delete('/transactionapi/proformainvoice/delete', passport.authenticate('j
     else { res.send(message); }
 });
 router.put('/transactionapi/proformainvoice/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'proformainvoice', 'update', req, proformainvoiceschema);
     if (message && message.status == true) {
         res.send(message);
@@ -101,6 +109,8 @@ var shippingschema = [{ "name": "Id", "required": true, "in": "body", "type": "s
 
 
 router.post('/transactionapi/shipping/create', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'shipping', 'create', req, shippingschema);
     if (message && message.status == true) {
         res.send(message);
@@ -120,6 +130,8 @@ router.delete('/transactionapi/shipping/delete', passport.authenticate('jwt', { 
     else { res.send(message); }
 });
 router.put('/transactionapi/shipping/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    req.body.CreatedOn = moment(new Date()).format();
+    req.body.CreatedBy = req.user.userName;
     let message = await invoke.invokeTransaction(cp, 'common', 'shipping', 'update', req, shippingschema);
     if (message && message.status == true) {
         res.send(message);
