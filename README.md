@@ -31,7 +31,7 @@ Api server will have necessary API components. It includes the nodejs-sdk to inv
 ## How to Run - Blockchain-network
 To run this successfully, in your system. YOu should have the pre-requisites exected first.
 ```
-git clone https://github.com/LogeswaranA/supply-chain.git
+git clone https://github.com/LogeswaranA/hyperledger-fabric-supply-chain
 ```
 Once the repository is cloned in your local machine, then 
 
