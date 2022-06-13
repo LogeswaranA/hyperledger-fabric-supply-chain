@@ -1,0 +1,256 @@
+{
+	"name": "supplychain",
+  "description": "supplychain",
+	"version": "1.0.0",
+	"license": "Apache-2.0",
+  "client": {
+      "organization": "org1"
+    },
+	"channels": {
+		"common": { 
+			"orderers": [ "orderer1.orderer.supplychain.com", "orderer2.orderer.supplychain.com", "orderer3.orderer.supplychain.com", "orderer4.orderer.supplychain.com", "orderer5.orderer.supplychain.com" ],
+      "peers": {
+				"peer0.org1.supplychain.com": {
+					"endorsingPeer": true,
+					"chaincodeQuery": true,
+					"ledgerQuery": true,
+					"eventSource": true
+        },
+				"peer1.org1.supplychain.com": {
+					"endorsingPeer": false,
+					"chaincodeQuery": true,
+					"ledgerQuery": true,
+					"eventSource": false
+        },
+				"peer0.org1.supplychain.com": {
+					"endorsingPeer": true,
+					"chaincodeQuery": true,
+					"ledgerQuery": true,
+					"eventSource": true
+        },
+				"peer1.org1.supplychain.com": {
+					"endorsingPeer": false,
+					"chaincodeQuery": true,
+					"ledgerQuery": true,
+					"eventSource": false
+        },
+				"peer0.org3.supplychain.com": {
+					"endorsingPeer": true,
+					"chaincodeQuery": true,
+					"ledgerQuery": true,
+					"eventSource": true
+        },
+				"peer1.org3.supplychain.com": {
+					"endorsingPeer": false,
+					"chaincodeQuery": true,
+					"ledgerQuery": true,
+					"eventSource": false
+        }
+     },
+      "chaincodes": [ "motherboardcc:v1.0", "purchaseordercc:v1.0", "proformainvoicecc:v1.0", "shippingcc:v1.0", "warehousecc:v1.0", "manufacturercc:v1.0", "distributorcc:v1.0", "logisticscc:v1.0" ]
+      }
+    },
+	"organizations": {
+		"org1": {
+           "mspid": "org1MSP",
+           "certificateAuthorities": [
+               "ca.org1.supplychain.com"
+            ],
+            "adminPrivateKey": {
+				"path": "./crypto/org1/admin/msp/keystore/priv_sk"
+			},
+			"signedCert": {
+				"path": "./crypto/org1/admin/msp/signcerts/Admin@org1.supplychain.com-cert.pem"
+			},
+            "peers": [
+				"peer0.org1.supplychain.com",
+				"peer1.org1.supplychain.com" ]
+				},
+		"org2": {
+           "mspid": "org2MSP",
+           "certificateAuthorities": [
+               "ca.org1.supplychain.com"
+            ],
+            "adminPrivateKey": {
+				"path": "./crypto/org2/admin/msp/keystore/priv_sk"
+			},
+			"signedCert": {
+				"path": "./crypto/org2/admin/msp/signcerts/Admin@org1.supplychain.com-cert.pem"
+			},
+            "peers": [
+				"peer0.org1.supplychain.com",
+				"peer1.org1.supplychain.com" ]
+				},
+		"org3": {
+           "mspid": "org3MSP",
+           "certificateAuthorities": [
+               "ca.org3.supplychain.com"
+            ],
+            "adminPrivateKey": {
+				"path": "./crypto/org3/admin/msp/keystore/priv_sk"
+			},
+			"signedCert": {
+				"path": "./crypto/org3/admin/msp/signcerts/Admin@org3.supplychain.com-cert.pem"
+			},
+            "peers": [
+				"peer0.org3.supplychain.com",
+				"peer1.org3.supplychain.com" ]
+				}
+    },
+	"peers": {
+  "peer0.org1.supplychain.com": {
+        "url": "grpcs://localhost:7051",
+        "eventUrl": "grpcs://localhost:7053",
+        "grpcOptions": {
+            "ssl-target-name-override": "peer0.org1.supplychain.com"
+        },
+        "tlsCACerts": {
+            "path": "./crypto/org1/tls/peer0/ca.crt"
+        }
+    },
+  "peer1.org1.supplychain.com": {
+        "url": "grpcs://localhost:8051",
+        "eventUrl": "grpcs://localhost:8053",
+        "grpcOptions": {
+            "ssl-target-name-override": "peer1.org1.supplychain.com"
+        },
+        "tlsCACerts": {
+            "path": "./crypto/org1/tls/peer1/ca.crt"
+        }
+    },
+  "peer0.org1.supplychain.com": {
+        "url": "grpcs://localhost:9051",
+        "eventUrl": "grpcs://localhost:9053",
+        "grpcOptions": {
+            "ssl-target-name-override": "peer0.org1.supplychain.com"
+        },
+        "tlsCACerts": {
+            "path": "./crypto/org2/tls/peer0/ca.crt"
+        }
+    },
+  "peer1.org1.supplychain.com": {
+        "url": "grpcs://localhost:10051",
+        "eventUrl": "grpcs://localhost:10053",
+        "grpcOptions": {
+            "ssl-target-name-override": "peer1.org1.supplychain.com"
+        },
+        "tlsCACerts": {
+            "path": "./crypto/org2/tls/peer1/ca.crt"
+        }
+    },
+  "peer0.org3.supplychain.com": {
+        "url": "grpcs://localhost:11051",
+        "eventUrl": "grpcs://localhost:11053",
+        "grpcOptions": {
+            "ssl-target-name-override": "peer0.org3.supplychain.com"
+        },
+        "tlsCACerts": {
+            "path": "./crypto/org3/tls/peer0/ca.crt"
+        }
+    },
+  "peer1.org3.supplychain.com": {
+        "url": "grpcs://localhost:12051",
+        "eventUrl": "grpcs://localhost:12053",
+        "grpcOptions": {
+            "ssl-target-name-override": "peer1.org3.supplychain.com"
+        },
+        "tlsCACerts": {
+            "path": "./crypto/org3/tls/peer1/ca.crt"
+        }
+    }
+   },
+	"certificateAuthorities": {
+  "ca.org1.supplychain.com": {
+        "url": "https://localhost:7054",
+        "httpOptions": {
+		    "verify": false
+		},
+        "tlsCACerts": {
+            "path": "./crypto/org1/tls/ca/ca.org1.supplychain.com-cert.pem"
+        },
+        "registrar": [
+            {
+                "enrollId": "supplychainorg1",
+                "enrollSecret": "p@ssw0rd"
+            }
+        ]
+    },
+  "ca.org1.supplychain.com": {
+        "url": "https://localhost:8054",
+        "httpOptions": {
+		    "verify": false
+		},
+        "tlsCACerts": {
+            "path": "./crypto/org2/tls/ca/ca.org1.supplychain.com-cert.pem"
+        },
+        "registrar": [
+            {
+                "enrollId": "supplychainorg2",
+                "enrollSecret": "p@ssw0rd"
+            }
+        ]
+    },
+  "ca.org3.supplychain.com": {
+        "url": "https://localhost:9054",
+        "httpOptions": {
+		    "verify": false
+		},
+        "tlsCACerts": {
+            "path": "./crypto/org3/tls/ca/ca.org3.supplychain.com-cert.pem"
+        },
+        "registrar": [
+            {
+                "enrollId": "supplychainorg3",
+                "enrollSecret": "p@ssw0rd"
+            }
+        ]
+    }
+},
+	"orderers": {
+		"orderer1.orderer.supplychain.com": {
+			"url": "grpcs://localhost:7050",
+			"grpcOptions": {
+				"ssl-target-name-override": "orderer1.orderer.supplychain.com"
+			},
+			"tlsCACerts": {
+				"path": "./crypto/orderer/orderer1/tls/ca.crt"
+			}
+		},
+		"orderer2.orderer.supplychain.com": {
+			"url": "grpcs://localhost:8050",
+			"grpcOptions": {
+				"ssl-target-name-override": "orderer2.orderer.supplychain.com"
+			},
+			"tlsCACerts": {
+				"path": "./crypto/orderer/orderer2/tls/ca.crt"
+			}
+		},
+		"orderer3.orderer.supplychain.com": {
+			"url": "grpcs://localhost:9050",
+			"grpcOptions": {
+				"ssl-target-name-override": "orderer3.orderer.supplychain.com"
+			},
+			"tlsCACerts": {
+				"path": "./crypto/orderer/orderer3/tls/ca.crt"
+			}
+		},
+		"orderer4.orderer.supplychain.com": {
+			"url": "grpcs://localhost:10050",
+			"grpcOptions": {
+				"ssl-target-name-override": "orderer4.orderer.supplychain.com"
+			},
+			"tlsCACerts": {
+				"path": "./crypto/orderer/orderer4/tls/ca.crt"
+			}
+		},
+		"orderer5.orderer.supplychain.com": {
+			"url": "grpcs://localhost:11050",
+			"grpcOptions": {
+				"ssl-target-name-override": "orderer5.orderer.supplychain.com"
+			},
+			"tlsCACerts": {
+				"path": "./crypto/orderer/orderer5/tls/ca.crt"
+			}
+		}
+    }
+}

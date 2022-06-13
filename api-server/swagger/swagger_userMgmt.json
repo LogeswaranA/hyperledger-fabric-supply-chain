@@ -1,0 +1,198 @@
+
+    "paths": {
+        "/register": {
+            "channel": "common",
+            "post": {
+                "tags": [
+                    "usermanagement"
+                ],
+                "description": "Create user",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Create User",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "orgName": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create user"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "channel": "common",
+            "post": {
+                "tags": [
+                    "usermanagement"
+                ],
+                "description": "Login user",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Login User",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "orgName": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login user"
+                    }
+                }
+            }
+        },
+        "/userList": {
+            "channel": "common",
+            "post": {
+                "tags": [
+                    "usermanagement"
+                ],
+                "description": "User List",
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "User List",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User List"
+                    }
+                }
+            }
+        },
+        "/editUser": {
+            "channel": "common",
+            "post": {
+                "tags": [
+                    "usermanagement"
+                ],
+                "description": "Edit User",
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Edit User",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Edit User"
+                    }
+                }
+            }
+        },
+        "/changePassword": {
+            "channel": "common",
+            "post": {
+                "tags": [
+                    "usermanagement"
+                ],
+                "description": "User List",
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "User List",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User List"
+                    }
+                }
+            }
+        }
+    

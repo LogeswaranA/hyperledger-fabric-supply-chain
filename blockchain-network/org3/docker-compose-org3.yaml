@@ -1,0 +1,156 @@
+     
+version: '2' 
+volumes:
+  peer0.org3.supplychain.com:
+  peer1.org3.supplychain.com:
+networks:
+    supplychain:
+services:
+  ca.org3.supplychain.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.org3.supplychain.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org3.supplychain.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org3.supplychain.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
+    ports:
+      - 9054:7054
+    command: sh -c 'fabric-ca-server start -b supplychainorg3:p@ssw0rd'
+    volumes:
+      - ./crypto-config/peerOrganizations/org3.supplychain.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.org3.supplychain.com
+    networks:
+      - supplychain
+    
+  peer0.org3.supplychain.com:
+    container_name: peer0.org3.supplychain.com
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=network_supplychain
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_ID=peer0.org3.supplychain.com
+      - CORE_PEER_ADDRESS=peer0.org3.supplychain.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org3.supplychain.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org3.supplychain.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org3.supplychain.com:7051
+      - CORE_PEER_LOCALMSPID=org3MSP
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couch.peer0.org3.supplychain.com:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=supplychainorg3
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=p@ssw0rd
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 11051:7051
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./crypto-config/peerOrganizations/org3.supplychain.com/peers/peer0.org3.supplychain.com/msp:/etc/hyperledger/fabric/msp
+      - ./crypto-config/peerOrganizations/org3.supplychain.com/peers/peer0.org3.supplychain.com/tls:/etc/hyperledger/fabric/tls
+      - peer0.org3.supplychain.com:/var/hyperledger/production
+    networks:
+      - supplychain
+
+  couch.peer0.org3.supplychain.com:
+    container_name: couch.peer0.org3.supplychain.com
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=supplychainorg3
+      - COUCHDB_PASSWORD=p@ssw0rd
+    ports:
+      - 9984:5984
+    networks:
+      - supplychain
+    
+  peer1.org3.supplychain.com:
+    container_name: peer1.org3.supplychain.com
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=network_supplychain
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_ID=peer1.org3.supplychain.com
+      - CORE_PEER_ADDRESS=peer1.org3.supplychain.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer1.org3.supplychain.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org3.supplychain.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org3.supplychain.com:7051
+      - CORE_PEER_LOCALMSPID=org3MSP
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couch.peer1.org3.supplychain.com:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=supplychainorg3
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=p@ssw0rd
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 12051:7051
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./crypto-config/peerOrganizations/org3.supplychain.com/peers/peer1.org3.supplychain.com/msp:/etc/hyperledger/fabric/msp
+      - ./crypto-config/peerOrganizations/org3.supplychain.com/peers/peer1.org3.supplychain.com/tls:/etc/hyperledger/fabric/tls
+      - peer1.org3.supplychain.com:/var/hyperledger/production
+    networks:
+      - supplychain
+
+  couch.peer1.org3.supplychain.com:
+    container_name: couch.peer1.org3.supplychain.com
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=supplychainorg3
+      - COUCHDB_PASSWORD=p@ssw0rd
+    ports:
+      - 10984:5984
+    networks:
+      - supplychain
+    
+  cli-org3:
+    container_name: cli-org3
+    image: hyperledger/fabric-tools:latest
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.org3.supplychain.com:7051
+      - CORE_PEER_LOCALMSPID=org3MSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.supplychain.com/peers/peer0.org3.supplychain.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations//peer0.org3.supplychain.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.supplychain.com/peers/peer0.org3.supplychain.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.supplychain.com/users/Admin@org3.supplychain.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    #command: /bin/bash
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./chaincode/:/opt/gopath/src/github.com/chaincode
+      - ../crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+      - ./cli-scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+      - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel
+      - ./orderer-tls:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/orderer/tls
+    depends_on:
+      - peer0.org3.supplychain.com
+      - peer1.org3.supplychain.com
+    networks:
+      - supplychain

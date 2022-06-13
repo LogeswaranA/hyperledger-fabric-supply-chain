@@ -1,0 +1,202 @@
+---
+Organizations:
+    - &orderer
+        Name: orderer
+        ID: ordererMSP
+        MSPDir: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('ordererMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('ordererMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('ordererMSP.admin')"
+    - &org1
+        Name: org1MSP
+        ID: org1MSP
+        MSPDir: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/peerOrganizations/org1.supplychain.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('org1MSP.admin', 'org1MSP.peer', 'org1MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('org1MSP.admin', 'org1MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('org1MSP.admin')"      
+            Endorsement:
+                Type: Signature
+                Rule: "OR('org1MSP.peer')"        
+        AnchorPeers: 
+            - Host: peer0.org1.supplychain.com
+              Port: 7051 
+    - &org2
+        Name: org2MSP
+        ID: org2MSP
+        MSPDir: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/peerOrganizations/org1.supplychain.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('org2MSP.admin', 'org2MSP.peer', 'org2MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('org2MSP.admin', 'org2MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('org2MSP.admin')"      
+            Endorsement:
+                Type: Signature
+                Rule: "OR('org2MSP.peer')"        
+        AnchorPeers: 
+            - Host: peer0.org1.supplychain.com
+              Port: 9051 
+    - &org3
+        Name: org3MSP
+        ID: org3MSP
+        MSPDir: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/peerOrganizations/org3.supplychain.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('org3MSP.admin', 'org3MSP.peer', 'org3MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('org3MSP.admin', 'org3MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('org3MSP.admin')"      
+            Endorsement:
+                Type: Signature
+                Rule: "OR('org3MSP.peer')"        
+        AnchorPeers: 
+            - Host: peer0.org3.supplychain.com
+              Port: 11051 
+Capabilities:
+    Channel: &ChannelCapabilities
+        V2_0: true
+    Orderer: &OrdererCapabilities
+        V2_0: true
+    Application: &ApplicationCapabilities
+        V2_0: true
+
+Application: &ApplicationDefaults
+    Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+    OrdererType: etcdraft
+    Addresses:
+        - orderer1.orderer.supplychain.com:7050
+        - orderer2.orderer.supplychain.com:7050
+        - orderer3.orderer.supplychain.com:7050
+        - orderer4.orderer.supplychain.com:7050
+        - orderer5.orderer.supplychain.com:7050
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 98 MB
+        PreferredMaxBytes: 512 KB
+    EtcdRaft:
+        Consenters:
+            - Host: orderer1.orderer.supplychain.com
+              Port: 7050
+              ClientTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer1.orderer.supplychain.com/tls/server.crt
+              ServerTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer1.orderer.supplychain.com/tls/server.crt 
+            - Host: orderer2.orderer.supplychain.com
+              Port: 7050
+              ClientTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer2.orderer.supplychain.com/tls/server.crt
+              ServerTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer2.orderer.supplychain.com/tls/server.crt 
+            - Host: orderer3.orderer.supplychain.com
+              Port: 7050
+              ClientTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer3.orderer.supplychain.com/tls/server.crt
+              ServerTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer3.orderer.supplychain.com/tls/server.crt 
+            - Host: orderer4.orderer.supplychain.com
+              Port: 7050
+              ClientTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer4.orderer.supplychain.com/tls/server.crt
+              ServerTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer4.orderer.supplychain.com/tls/server.crt 
+            - Host: orderer5.orderer.supplychain.com
+              Port: 7050
+              ClientTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer5.orderer.supplychain.com/tls/server.crt
+              ServerTLSCert: /home/user/MyProjects/Blockchain/Hyperledger/blockyt/restapi/public/network/62a747ff8411d169a901c31e/crypto-config/ordererOrganizations/orderer.supplychain.com/orderers/orderer5.orderer.supplychain.com/tls/server.crt 
+    Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ChannelCapabilities
+
+Profiles:
+    RaftOrderer:
+        <<: *ChannelDefaults
+        Capabilities:
+            <<: *ChannelCapabilities
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+            - *orderer
+            Capabilities:
+                <<: *OrdererCapabilities
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+            - <<: *orderer
+        Consortiums:
+            Consortiumcommon:
+                Organizations:
+                   - *org1
+                   - *org2
+                   - *org3
+    common:
+        Consortium: Consortiumcommon
+        <<: *ChannelDefaults
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *org1
+                - *org2
+                - *org3
+            Capabilities:
+                <<: *ApplicationCapabilities
